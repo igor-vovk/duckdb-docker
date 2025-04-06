@@ -3,9 +3,11 @@
 ARCH=$(uname -m)
 
 if [ "$ARCH" = "x86_64" ]; then
-  exec /app/amd64/duckdb --listen --interface=0.0.0.0 "$@"
+  echo "Running on x86_64 architecture"
+  exec /app/amd64/duckdb -json "$@"
 elif [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then
-  exec /app/aarch64/duckdb --listen --interface=0.0.0.0 "$@"
+  echo "Running on aarch64 architecture"
+  exec /app/aarch64/duckdb -json "$@"
 else
   echo "Unsupported architecture: $ARCH"
   exit 1
