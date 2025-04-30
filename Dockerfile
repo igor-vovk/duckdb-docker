@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim AS base
+FROM debian:latest AS base
 
 FROM base AS builder
 
@@ -25,10 +25,11 @@ FROM base AS runtime
 WORKDIR /app
 
 RUN groupadd --gid 1001 duckdb && \
-    useradd --uid 1001 --gid 1001 --shell /bin/bash --create-home duckdb
+   useradd --uid 1001 --gid 1001 --shell /bin/bash --create-home duckdb
 
-COPY --from=builder /app/amd64/duckdb /app/amd64/duckdb
-COPY --from=builder /app/aarch64/duckdb /app/aarch64/duckdb
+COPY --from=builder /app /app
+
+COPY /init/.duckdbrc /home/duckdb/.duckdbrc
 
 COPY duckdb-wrapper.sh /app/duckdb-wrapper.sh
 RUN chmod +x /app/duckdb-wrapper.sh && \
@@ -40,4 +41,4 @@ EXPOSE 4213
 
 ENTRYPOINT ["/app/duckdb-wrapper.sh"]
 
-CMD ["-ui"]
+CMD []
